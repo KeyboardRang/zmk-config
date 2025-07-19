@@ -3,7 +3,10 @@
         compatible = "zmk,keymap";
 
         default_layer {
-            bindings = <&ks &kp ESC &kp GRAVE>, <&unlock>, <&kp W>;
+            bindings = <
+                &morph_esc
+                <다른 키들 계속>
+            >;
         };
     };
 };
