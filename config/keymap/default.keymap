@@ -3,7 +3,7 @@
         compatible = "zmk,keymap";
 
         default_layer {
-            bindings = <&kp Q>, <&unlock>, <&kp W>;
+            bindings = <&ks &kp ESC &kp GRAVE>, <&unlock>, <&kp W>;
         };
     };
 };
