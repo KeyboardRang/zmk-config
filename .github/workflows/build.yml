@@ -1,53 +1,41 @@
 name: Build ZMK firmware
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: zmkfirmware/zmk-build-arm:3.0
     steps:
-      - name: Checkout user config
+      - name: Checkout config repo
         uses: actions/checkout@v3
+        with:
+          path: config
 
       - name: Clone ZMK
         uses: actions/checkout@v3
         with:
           repository: zmkfirmware/zmk
           path: zmk
-          ref: main
-          submodules: true
 
-      - name: Init west workspace
+      - name: Setup Zephyr
+        uses: zmkfirmware/setup-zephyr@main
+
+      - name: Build firmware
         run: |
-          mkdir workspace
-          cd workspace
-          west init -l ../zmk/app
+          west init -l config
           west update
-
-      - name: Build Photon (LEFT)
-        run: |
-          cd workspace
-          west build -s ../zmk/app -d build/left -b photon -- -DSHIELD=photon
-
-      - name: Build Photon (RIGHT)
-        run: |
-          cd workspace
-          west build -s ../zmk/app -d build/right -b photon -- -DSHIELD=photon_right
+          west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=corne_left
+          west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=corne_right
 
       - name: Upload LEFT firmware
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: photon-left
-          path: workspace/build/left/zephyr/zmk.uf2
+          name: zmk-left
+          path: build/left/zephyr/zmk.uf2
 
       - name: Upload RIGHT firmware
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
-          name: photon-right
-          path: workspace/build/right/zephyr/zmk.uf2
+          name: zmk-right
+          path: build/right/zephyr/zmk.uf2
