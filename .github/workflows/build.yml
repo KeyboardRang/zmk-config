@@ -23,9 +23,14 @@ jobs:
           ref: main
           submodules: true
 
-      - name: Build Photon
-        run: west build -s zmk/app -d build/left -b photon -- -DSHIELD=photon
+    - name: Init West workspace
+  run: |
+    west init -l zmk/app
+    west update
 
+- name: Build Photon
+  run: west build -s zmk/app -d build/left -b photon -- -DSHIELD=photon
+  
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
