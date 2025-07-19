@@ -1,10 +1,10 @@
 / {
     behaviors {
-        morph_esc: behavior_morph {
+        esc_grave: behavior_morph {
             compatible = "zmk,behavior-morph";
-            #binding-cells = <0>;
             bindings = <&kp ESC>, <&kp GRAVE>;
-            morph-trigger = <&kp LSFT>;
+            primary-behavior = <0>;
+            alternate-behavior = <(MOD_LSFT)>;
         };
     };
 };
