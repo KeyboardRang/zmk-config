@@ -1,6 +1,6 @@
 / {
     behaviors {
-        esc_grave: behavior_morph {
+        mod_morph_esc: behavior_morph {
             compatible = "zmk,behavior-morph";
             bindings = <&kp ESC>, <&kp GRAVE>;
             primary-behavior = <0>;
