@@ -1,0 +1,33 @@
+name: Build ZMK firmware
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: zmkfirmware/zmk-build-arm:2.5
+    steps:
+      - name: Checkout user config
+        uses: actions/checkout@v3
+
+      - name: Clone ZMK
+        uses: actions/checkout@v3
+        with:
+          repository: zmkfirmware/zmk
+          path: zmk
+          ref: main
+          submodules: true
+
+      - name: Build Photon
+        run: west build -s zmk/app -d build/left -b photon -- -DSHIELD=photon
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v3
+        with:
+          name: photon
+          path: build/left/zephyr/zmk.uf2
