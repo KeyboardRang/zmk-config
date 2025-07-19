@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: zmkfirmware/zmk-build-arm:3.0
-
     steps:
       - name: Checkout user config
         uses: actions/checkout@v3
@@ -36,7 +35,19 @@ jobs:
           cd workspace
           west build -s ../zmk/app -d build/left -b photon -- -DSHIELD=photon
 
-      - name: Upload firmware
+      - name: Build Photon (RIGHT)
+        run: |
+          cd workspace
+          west build -s ../zmk/app -d build/right -b photon -- -DSHIELD=photon_right
+
+      - name: Upload LEFT firmware
         uses: actions/upload-artifact@v4
         with:
-          name: photon
+          name: photon-left
+          path: workspace/build/left/zephyr/zmk.uf2
+
+      - name: Upload RIGHT firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: photon-right
+          path: workspace/build/right/zephyr/zmk.uf2
