@@ -4,8 +4,8 @@
 
         default_layer {
             bindings = <
-                &morph_esc
-                <다른 키들 계속>
+                &mt LSHIFT ESC_GRAVE
+                // 여기에 나머지 키들 계속 추가
             >;
         };
     };
