@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Clone ZMK
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           repository: zmkfirmware/zmk
           path: zmk
@@ -27,7 +27,7 @@ jobs:
         run: west build -s zmk/app -d build/left -b photon -- -DSHIELD=photon
 
       - name: Upload firmware
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: photon
           path: build/left/zephyr/zmk.uf2
