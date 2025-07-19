@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: zmkfirmware/zmk-build-arm:3.0
+
     steps:
       - name: Checkout user config
         uses: actions/checkout@v3
@@ -23,14 +24,14 @@ jobs:
           ref: main
           submodules: true
 
-      - name: Init West workspace
+      - name: Init west workspace
         run: |
           mkdir workspace
           cd workspace
           west init -l ../zmk/app
           west update
 
-      - name: Build Photon
+      - name: Build Photon (LEFT)
         run: |
           cd workspace
           west build -s ../zmk/app -d build/left -b photon -- -DSHIELD=photon
@@ -39,4 +40,3 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: photon
-          path: workspace/build/left/zephyr/zmk.uf2
