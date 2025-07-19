@@ -8,34 +8,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout config repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: config
 
       - name: Clone ZMK
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: zmkfirmware/zmk
           path: zmk
 
-      - name: Setup Zephyr
-        uses: zmkfirmware/setup-zephyr@main
-
-      - name: Build firmware
+      - name: Initialize West and Zephyr
         run: |
+          pip install west
           west init -l config
           west update
+
+      - name: Build firmware (LEFT)
+        run: |
           west build -s zmk/app -d build/left -b nice_nano_v2 -- -DSHIELD=corne_left
+
+      - name: Build firmware (RIGHT)
+        run: |
           west build -s zmk/app -d build/right -b nice_nano_v2 -- -DSHIELD=corne_right
 
       - name: Upload LEFT firmware
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zmk-left
           path: build/left/zephyr/zmk.uf2
 
       - name: Upload RIGHT firmware
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: zmk-right
           path: build/right/zephyr/zmk.uf2
